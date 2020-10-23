@@ -2,10 +2,14 @@ name: Deploy mdBook
 on: [push]
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: macos-latest
     steps:
       - uses: actions/checkout@v2
-      - uses: XAMPPRocky/deploy-mdbook@v1.1
+      - run: brew install mdbook
+      - run: cd docs && mdbook build
+      - uses: JamesIves/github-pages-deploy-action@3.7.1
         with:
-            token: ${{ secrets.GITHUB_TOKEN }}
-            workspace: ${{ env.GITHUB_WORKSPACE }}/docs/
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          BRANCH: gh-pages # The branch the action should deploy to.
+          FOLDER: docs/build # The folder the action should deploy.
+          CLEAN: true # Automatically remove deleted files from the deploy branch
