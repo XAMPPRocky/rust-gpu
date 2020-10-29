@@ -333,6 +333,12 @@
 <span id="330">330</span>
 <span id="331">331</span>
 <span id="332">332</span>
+<span id="333">333</span>
+<span id="334">334</span>
+<span id="335">335</span>
+<span id="336">336</span>
+<span id="337">337</span>
+<span id="338">338</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">codegen_cx</span>::<span class="ident">CodegenCx</span>;
 <span class="kw">use</span> <span class="ident">rspirv</span>::<span class="ident">spirv</span>::{<span class="ident">BuiltIn</span>, <span class="ident">ExecutionModel</span>, <span class="ident">StorageClass</span>};
@@ -349,6 +355,9 @@
     <span class="kw">pub</span> <span class="ident">spirv</span>: <span class="ident">Symbol</span>,
     <span class="kw">pub</span> <span class="ident">spirv_std</span>: <span class="ident">Symbol</span>,
     <span class="kw">pub</span> <span class="ident">kernel</span>: <span class="ident">Symbol</span>,
+    <span class="kw">pub</span> <span class="ident">simple</span>: <span class="ident">Symbol</span>,
+    <span class="kw">pub</span> <span class="ident">vulkan</span>: <span class="ident">Symbol</span>,
+    <span class="kw">pub</span> <span class="ident">glsl450</span>: <span class="ident">Symbol</span>,
     <span class="kw">pub</span> <span class="ident">spirv10</span>: <span class="ident">Symbol</span>,
     <span class="kw">pub</span> <span class="ident">spirv11</span>: <span class="ident">Symbol</span>,
     <span class="kw">pub</span> <span class="ident">spirv12</span>: <span class="ident">Symbol</span>,
@@ -553,6 +562,9 @@
             <span class="ident">spirv</span>: <span class="ident">Symbol</span>::<span class="ident">intern</span>(<span class="string">&quot;spirv&quot;</span>),
             <span class="ident">spirv_std</span>: <span class="ident">Symbol</span>::<span class="ident">intern</span>(<span class="string">&quot;spirv_std&quot;</span>),
             <span class="ident">kernel</span>: <span class="ident">Symbol</span>::<span class="ident">intern</span>(<span class="string">&quot;kernel&quot;</span>),
+            <span class="ident">simple</span>: <span class="ident">Symbol</span>::<span class="ident">intern</span>(<span class="string">&quot;simple&quot;</span>),
+            <span class="ident">vulkan</span>: <span class="ident">Symbol</span>::<span class="ident">intern</span>(<span class="string">&quot;vulkan&quot;</span>),
+            <span class="ident">glsl450</span>: <span class="ident">Symbol</span>::<span class="ident">intern</span>(<span class="string">&quot;glsl450&quot;</span>),
             <span class="ident">spirv10</span>: <span class="ident">Symbol</span>::<span class="ident">intern</span>(<span class="string">&quot;spirv1.0&quot;</span>),
             <span class="ident">spirv11</span>: <span class="ident">Symbol</span>::<span class="ident">intern</span>(<span class="string">&quot;spirv1.1&quot;</span>),
             <span class="ident">spirv12</span>: <span class="ident">Symbol</span>::<span class="ident">intern</span>(<span class="string">&quot;spirv1.2&quot;</span>),

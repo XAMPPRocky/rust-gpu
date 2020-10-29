@@ -300,6 +300,15 @@
 <span id="297">297</span>
 <span id="298">298</span>
 <span id="299">299</span>
+<span id="300">300</span>
+<span id="301">301</span>
+<span id="302">302</span>
+<span id="303">303</span>
+<span id="304">304</span>
+<span id="305">305</span>
+<span id="306">306</span>
+<span id="307">307</span>
+<span id="308">308</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="kw">use</span> <span class="ident">bimap</span>::<span class="ident">BiHashMap</span>;
 <span class="kw">use</span> <span class="ident">rspirv</span>::<span class="ident">dr</span>::{<span class="ident">Block</span>, <span class="ident">Builder</span>, <span class="ident">Module</span>, <span class="ident">Operand</span>};
@@ -374,17 +383,26 @@
 }
 
 <span class="kw">impl</span> <span class="ident">BuilderSpirv</span> {
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">version</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span>(<span class="ident">u8</span>, <span class="ident">u8</span>)<span class="op">&gt;</span>, <span class="ident">kernel_mode</span>: <span class="ident">bool</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>(
+        <span class="ident">version</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span>(<span class="ident">u8</span>, <span class="ident">u8</span>)<span class="op">&gt;</span>,
+        <span class="ident">memory_model</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">MemoryModel</span><span class="op">&gt;</span>,
+        <span class="ident">kernel_mode</span>: <span class="ident">bool</span>,
+    ) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">builder</span> <span class="op">=</span> <span class="ident">Builder</span>::<span class="ident">new</span>();
         <span class="comment">// Default to spir-v 1.3</span>
         <span class="kw">let</span> <span class="ident">version</span> <span class="op">=</span> <span class="ident">version</span>.<span class="ident">unwrap_or</span>((<span class="number">1</span>, <span class="number">3</span>));
         <span class="ident">builder</span>.<span class="ident">set_version</span>(<span class="ident">version</span>.<span class="number">0</span>, <span class="ident">version</span>.<span class="number">1</span>);
+        <span class="kw">let</span> <span class="ident">memory_model</span> <span class="op">=</span> <span class="ident">memory_model</span>.<span class="ident">unwrap_or</span>(<span class="ident">MemoryModel</span>::<span class="ident">Vulkan</span>);
         <span class="kw">if</span> <span class="ident">kernel_mode</span> {
             <span class="ident">builder</span>.<span class="ident">capability</span>(<span class="ident">Capability</span>::<span class="ident">Kernel</span>);
         } <span class="kw">else</span> {
-            <span class="ident">builder</span>.<span class="ident">extension</span>(<span class="string">&quot;SPV_KHR_vulkan_memory_model&quot;</span>);
             <span class="ident">builder</span>.<span class="ident">capability</span>(<span class="ident">Capability</span>::<span class="ident">Shader</span>);
-            <span class="ident">builder</span>.<span class="ident">capability</span>(<span class="ident">Capability</span>::<span class="ident">VulkanMemoryModel</span>);
+            <span class="kw">if</span> <span class="ident">memory_model</span> <span class="op">=</span><span class="op">=</span> <span class="ident">MemoryModel</span>::<span class="ident">Vulkan</span> {
+                <span class="kw">if</span> <span class="ident">version</span> <span class="op">&lt;</span> (<span class="number">1</span>, <span class="number">5</span>) {
+                    <span class="ident">builder</span>.<span class="ident">extension</span>(<span class="string">&quot;SPV_KHR_vulkan_memory_model&quot;</span>);
+                }
+                <span class="ident">builder</span>.<span class="ident">capability</span>(<span class="ident">Capability</span>::<span class="ident">VulkanMemoryModel</span>);
+            }
             <span class="ident">builder</span>.<span class="ident">capability</span>(<span class="ident">Capability</span>::<span class="ident">VariablePointers</span>);
             <span class="kw">if</span> <span class="ident">version</span> <span class="op">&lt;</span> (<span class="number">1</span>, <span class="number">3</span>) {
                 <span class="ident">builder</span>.<span class="ident">extension</span>(<span class="string">&quot;SPV_KHR_variable_pointers&quot;</span>);
@@ -401,7 +419,7 @@
             <span class="ident">builder</span>.<span class="ident">capability</span>(<span class="ident">Capability</span>::<span class="ident">Addresses</span>);
             <span class="ident">builder</span>.<span class="ident">memory_model</span>(<span class="ident">AddressingModel</span>::<span class="ident">Physical32</span>, <span class="ident">MemoryModel</span>::<span class="ident">OpenCL</span>);
         } <span class="kw">else</span> {
-            <span class="ident">builder</span>.<span class="ident">memory_model</span>(<span class="ident">AddressingModel</span>::<span class="ident">Logical</span>, <span class="ident">MemoryModel</span>::<span class="ident">Vulkan</span>);
+            <span class="ident">builder</span>.<span class="ident">memory_model</span>(<span class="ident">AddressingModel</span>::<span class="ident">Logical</span>, <span class="ident">memory_model</span>);
         }
         <span class="self">Self</span> {
             <span class="ident">builder</span>: <span class="ident">RefCell</span>::<span class="ident">new</span>(<span class="ident">builder</span>),
